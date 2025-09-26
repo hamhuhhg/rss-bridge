@@ -120,7 +120,7 @@
         </form>
     </div>
     <div id="iframe-container">
-        <iframe id="iframe" src="<?= e($url) ?>"></iframe>
+        <iframe id="iframe" src="?action=proxy&url=<?= e(urlencode($url)) ?>"></iframe>
     </div>
 </body>
 </html>

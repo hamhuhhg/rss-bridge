@@ -32,6 +32,10 @@ $container[ListAction::class] = function ($c) {
     return new ListAction($c['bridge_factory']);
 };
 
+$container[ProxyAction::class] = function ($c) {
+    return new ProxyAction($c['http_client']);
+};
+
 $container[VisualSelectorAction::class] = function () {
     return new VisualSelectorAction();
 };
