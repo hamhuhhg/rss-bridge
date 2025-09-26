@@ -175,6 +175,10 @@ final class BridgeCard
 
         $form .= '<button type="submit" name="format" formtarget="_blank" value="Html">Generate feed</button>';
 
+        if ($bridgeClassName === 'XPathBridge') {
+            $form .= '<button type="button" onclick="window.open(\'?action=visual-selector&url=\' + this.form.querySelector(\'input[name=url]\').value + \'&bridgeId=\' + this.form.closest(\'.bridge-card\').id, \'_blank\')">Create Feed Visually</button>';
+        }
+
         return $form . '</form>' . PHP_EOL;
     }
 

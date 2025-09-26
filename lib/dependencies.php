@@ -32,6 +32,10 @@ $container[ListAction::class] = function ($c) {
     return new ListAction($c['bridge_factory']);
 };
 
+$container[VisualSelectorAction::class] = function () {
+    return new VisualSelectorAction();
+};
+
 $container['bridge_factory'] = function ($c) {
     return new BridgeFactory($c['cache'], $c['logger']);
 };
