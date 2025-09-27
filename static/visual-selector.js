@@ -61,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const inputs = form.querySelectorAll('input[type=text]');
 
             inputs.forEach(input => {
-                // The query needs to be scoped to the opener's document
                 const targetInput = window.opener.document.querySelector(`#${bridgeId} input[name=${input.name}]`);
                 if (targetInput) {
                     targetInput.value = input.value;
@@ -77,39 +76,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function getXPath(element) {
-        if (element.id) {
-            return `//${element.tagName.toLowerCase()}[@id='${element.id}']`;
+        if (element.id !== '') {
+            return `//*[@id='${element.id}']`;
         }
         if (element === document.body) {
             return '/html/body';
         }
 
-        let path = '';
-        let current = element;
-        while (current && current.nodeType === Node.ELEMENT_NODE) {
-            let selector = current.nodeName.toLowerCase();
-            if (current.className) {
-                const classes = current.className.trim().split(/\s+/).join('.');
-                selector += `[contains(@class, '${classes.replace(/\./g, "') and contains(@class, '")}')]`;
-            } else {
-                 const siblings = Array.from(current.parentNode.children).filter(
-                    (sibling) => sibling.nodeName === current.nodeName
-                );
-                if (siblings.length > 1) {
-                    const index = siblings.indexOf(current) + 1;
-                    selector += `[${index}]`;
-                }
+        let ix = 0;
+        const siblings = element.parentNode.childNodes;
+        for (let i = 0; i < siblings.length; i++) {
+            const sibling = siblings[i];
+            if (sibling === element) {
+                return getXPath(element.parentNode) + '/' + element.tagName.toLowerCase() + '[' + (ix + 1) + ']';
             }
-
-            path = '/' + selector + path;
-
-            // Stop at body or if parent is not an element
-            if (current.parentNode === document.body || !current.parentNode || current.parentNode.nodeType !== Node.ELEMENT_NODE) {
-                path = '/html/body' + path;
-                break;
+            if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
+                ix++;
             }
-            current = current.parentNode;
         }
-        return path;
+        return null; // Should not happen
     }
 });
