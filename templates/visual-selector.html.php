@@ -62,15 +62,6 @@
 <body>
     <div id="control-panel">
         <h2>Visual Selector</h2>
-        <div class="instructions">
-            <p><strong>طريقة الاستخدام:</strong></p>
-            <ol>
-                <li>انقر على أي عنصر في الصفحة على اليسار. سيظهر مسار XPath الخاص به في مربع "Selected XPath".</li>
-                <li>لتحديد <strong>قائمة</strong> من العناصر (مثل قائمة أخبار)، قم بتفعيل خيار "<strong>تعميم لتحديد قائمة</strong>" أسفل حقل "Item selector".</li>
-                <li>استخدم زر "<strong>Preview</strong>" لمعاينة العناصر التي تم تحديدها. ستظهر باللون الأخضر.</li>
-                <li>استخدم زر "<strong>Set</strong>" لتعيين المسار إلى الحقل المطلوب.</li>
-            </ol>
-        </div>
         <div id="selection-display">
             <p><strong>Selected XPath:</strong></p>
             <code id="selected-xpath"></code>
@@ -83,10 +74,6 @@
                     <button type="button" class="set-button" data-target="item">Set</button>
                     <button type="button" class="preview-button" data-target="item">Preview</button>
                     <button type="button" class="clear-button" data-target="item">Clear</button>
-                </div>
-                <div class="generalize-option">
-                    <input type="checkbox" id="generalize-item">
-                    <label for="generalize-item">تعميم لتحديد قائمة</label>
                 </div>
             </div>
             <div class="form-field">

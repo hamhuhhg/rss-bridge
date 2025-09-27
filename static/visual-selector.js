@@ -2,11 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const iframe = document.getElementById('iframe');
     const selectedXpathDisplay = document.getElementById('selected-xpath');
     const controlPanel = document.getElementById('control-panel');
-    const generalizeCheckbox = document.getElementById('generalize-item');
-    const itemInput = document.getElementById('item');
 
     let currentXpath = '';
-    let specificItemXpath = ''; // To store the specific path before generalization
 
     iframe.addEventListener('load', () => {
         const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
@@ -46,34 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (target.classList.contains('set-button')) {
             inputField.value = currentXpath;
-            if (inputId === 'item') {
-                specificItemXpath = currentXpath;
-                generalizeCheckbox.checked = false;
-            }
         } else if (target.classList.contains('clear-button')) {
             inputField.value = '';
             previewXPath(''); // Clear preview when clearing input
         } else if (target.classList.contains('preview-button')) {
             previewXPath(inputField.value);
-        }
-    });
-
-    // Handle generalize checkbox
-    generalizeCheckbox.addEventListener('change', (event) => {
-        if (event.target.checked) {
-            if (itemInput.value) {
-                // Store the current value as the specific path if it's not already generalized
-                if (itemInput.value.match(/\[\d+\]$/)) {
-                    specificItemXpath = itemInput.value;
-                }
-                // Generalize the path by removing the last positional predicate
-                itemInput.value = itemInput.value.replace(/\[\d+\]$/, '');
-            }
-        } else {
-            // Revert to the specific path if it exists
-            if (specificItemXpath) {
-                itemInput.value = specificItemXpath;
-            }
         }
     });
 
@@ -135,24 +109,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function getXPath(element) {
-        if (element.id !== '') {
-            return `//*[@id='${element.id}']`;
-        }
-        if (element === document.body) {
-            return '/html/body';
-        }
+        const parts = [];
+        for (; element && element.nodeType === Node.ELEMENT_NODE; element = element.parentNode) {
+            let part = element.tagName.toLowerCase();
+            if (element.id) {
+                // ID is unique, so we can stop here
+                part = `*[@id='${element.id}']`;
+                parts.unshift(part);
+                break;
+            }
 
-        let ix = 0;
-        const siblings = element.parentNode.childNodes;
-        for (let i = 0; i < siblings.length; i++) {
-            const sibling = siblings[i];
-            if (sibling === element) {
-                return getXPath(element.parentNode) + '/' + element.tagName.toLowerCase() + '[' + (ix + 1) + ']';
+            const classes = Array.from(element.classList);
+            if (classes.length > 0) {
+                // Use classes to make the selector more specific and general
+                const classConditions = classes.map(c => `contains(concat(' ', normalize-space(@class), ' '), ' ${c} ')`).join(' and ');
+                part += `[${classConditions}]`;
+            } else {
+                // Fallback to positional index if no classes are available
+                let index = 1;
+                let sibling = element.previousElementSibling;
+                while (sibling) {
+                    if (sibling.tagName === element.tagName) {
+                        index++;
+                    }
+                    sibling = sibling.previousElementSibling;
+                }
+                part += `[${index}]`;
             }
-            if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
-                ix++;
-            }
+            parts.unshift(part);
         }
-        return null;
+        return parts.length ? '//' + parts.join('/') : null;
     }
 });

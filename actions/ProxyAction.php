@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../lib/php-urljoin/src/urljoin.php';
+
 class ProxyAction implements ActionInterface
 {
     private CurlHttpClient $httpClient;
