@@ -19,7 +19,7 @@ $files = [
     __DIR__ . '/../lib/seotags.php',
     // Vendor
     __DIR__ . '/../lib/parsedown/Parsedown.php',
-    __DIR__ . '/../lib/php-urljoin/src/urljoin.php',
+    __DIR__ . '/../vendor/jakeasmith/php-url-join/src/url_join.php',
     __DIR__ . '/../lib/simplehtmldom/simple_html_dom.php',
 ];
 foreach ($files as $file) {

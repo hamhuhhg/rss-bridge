@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../vendor/jakeasmith/php-url-join/src/url_join.php';
-
 class ProxyAction implements ActionInterface
 {
     private CurlHttpClient $httpClient;
