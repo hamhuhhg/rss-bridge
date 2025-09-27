@@ -63,9 +63,13 @@
     <div id="control-panel">
         <h2>Visual Selector</h2>
         <div class="instructions">
-            <p><strong>ملاحظة هامة:</strong></p>
-            <p>لتحديد <strong>قائمة</strong> من العناصر (مثل قائمة أخبار)، انقر على العنصر <strong>الأول</strong> في القائمة. بعد ذلك، قم بتعيين مسار XPath إلى حقل "محدد العنصر".</p>
-            <p>أخيراً، <strong>احذف يدوياً</strong> رقم الفهرس من نهاية المسار (مثال: احذف <code>[1]</code>) لتحديد جميع العناصر في القائمة.</p>
+            <p><strong>طريقة الاستخدام:</strong></p>
+            <ol>
+                <li>انقر على أي عنصر في الصفحة على اليسار. سيظهر مسار XPath الخاص به في مربع "Selected XPath".</li>
+                <li>لتحديد <strong>قائمة</strong> من العناصر (مثل قائمة أخبار)، قم بتفعيل خيار "<strong>تعميم لتحديد قائمة</strong>" أسفل حقل "Item selector".</li>
+                <li>استخدم زر "<strong>Preview</strong>" لمعاينة العناصر التي تم تحديدها. ستظهر باللون الأخضر.</li>
+                <li>استخدم زر "<strong>Set</strong>" لتعيين المسار إلى الحقل المطلوب.</li>
+            </ol>
         </div>
         <div id="selection-display">
             <p><strong>Selected XPath:</strong></p>
@@ -77,7 +81,12 @@
                 <div class="input-group">
                     <input type="text" id="item" name="item">
                     <button type="button" class="set-button" data-target="item">Set</button>
+                    <button type="button" class="preview-button" data-target="item">Preview</button>
                     <button type="button" class="clear-button" data-target="item">Clear</button>
+                </div>
+                <div class="generalize-option">
+                    <input type="checkbox" id="generalize-item">
+                    <label for="generalize-item">تعميم لتحديد قائمة</label>
                 </div>
             </div>
             <div class="form-field">
@@ -85,6 +94,7 @@
                 <div class="input-group">
                     <input type="text" id="title" name="title">
                     <button type="button" class="set-button" data-target="title">Set</button>
+                    <button type="button" class="preview-button" data-target="title">Preview</button>
                     <button type="button" class="clear-button" data-target="title">Clear</button>
                 </div>
             </div>
@@ -93,6 +103,7 @@
                 <div class="input-group">
                     <input type="text" id="content" name="content">
                     <button type="button" class="set-button" data-target="content">Set</button>
+                    <button type="button" class="preview-button" data-target="content">Preview</button>
                     <button type="button" class="clear-button" data-target="content">Clear</button>
                 </div>
             </div>
@@ -101,6 +112,7 @@
                 <div class="input-group">
                     <input type="text" id="uri" name="uri">
                     <button type="button" class="set-button" data-target="uri">Set</button>
+                    <button type="button" class="preview-button" data-target="uri">Preview</button>
                     <button type="button" class="clear-button" data-target="uri">Clear</button>
                 </div>
             </div>
@@ -109,6 +121,7 @@
                 <div class="input-group">
                     <input type="text" id="author" name="author">
                     <button type="button" class="set-button" data-target="author">Set</button>
+                    <button type="button" class="preview-button" data-target="author">Preview</button>
                     <button type="button" class="clear-button" data-target="author">Clear</button>
                 </div>
             </div>
@@ -117,6 +130,7 @@
                 <div class="input-group">
                     <input type="text" id="timestamp" name="timestamp">
                     <button type="button" class="set-button" data-target="timestamp">Set</button>
+                    <button type="button" class="preview-button" data-target="timestamp">Preview</button>
                     <button type="button" class="clear-button" data-target="timestamp">Clear</button>
                 </div>
             </div>
@@ -125,6 +139,7 @@
                 <div class="input-group">
                     <input type="text" id="enclosures" name="enclosures">
                     <button type="button" class="set-button" data-target="enclosures">Set</button>
+                    <button type="button" class="preview-button" data-target="enclosures">Preview</button>
                     <button type="button" class="clear-button" data-target="enclosures">Clear</button>
                 </div>
             </div>
@@ -133,6 +148,7 @@
                 <div class="input-group">
                     <input type="text" id="categories" name="categories">
                     <button type="button" class="set-button" data-target="categories">Set</button>
+                    <button type="button" class="preview-button" data-target="categories">Preview</button>
                     <button type="button" class="clear-button" data-target="categories">Clear</button>
                 </div>
             </div>

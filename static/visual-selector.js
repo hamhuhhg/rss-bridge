@@ -2,11 +2,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const iframe = document.getElementById('iframe');
     const selectedXpathDisplay = document.getElementById('selected-xpath');
     const controlPanel = document.getElementById('control-panel');
+    const generalizeCheckbox = document.getElementById('generalize-item');
+    const itemInput = document.getElementById('item');
 
     let currentXpath = '';
+    let specificItemXpath = ''; // To store the specific path before generalization
 
     iframe.addEventListener('load', () => {
         const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+        // Add a style element for highlighting previewed elements
+        const style = iframeDocument.createElement('style');
+        style.innerHTML = '.rss-bridge-highlight { outline: 3px solid #33cc33 !important; background-color: rgba(51, 204, 51, 0.3) !important; }';
+        iframeDocument.head.appendChild(style);
 
         // Highlight elements on mouseover
         iframeDocument.addEventListener('mouseover', (event) => {
@@ -27,23 +35,74 @@ document.addEventListener('DOMContentLoaded', function() {
         }, true);
     });
 
-    // Handle "Set" and "Clear" buttons
+    // Handle "Set", "Clear", and "Preview" buttons
     controlPanel.addEventListener('click', (event) => {
         const target = event.target;
+        if (!target.dataset.target) return;
+
+        const inputId = target.dataset.target;
+        const inputField = document.getElementById(inputId);
+        if (!inputField) return;
+
         if (target.classList.contains('set-button')) {
-            const inputId = target.dataset.target;
-            const inputField = document.getElementById(inputId);
-            if (inputField) {
-                inputField.value = currentXpath;
+            inputField.value = currentXpath;
+            if (inputId === 'item') {
+                specificItemXpath = currentXpath;
+                generalizeCheckbox.checked = false;
             }
         } else if (target.classList.contains('clear-button')) {
-            const inputId = target.dataset.target;
-            const inputField = document.getElementById(inputId);
-            if (inputField) {
-                inputField.value = '';
+            inputField.value = '';
+            previewXPath(''); // Clear preview when clearing input
+        } else if (target.classList.contains('preview-button')) {
+            previewXPath(inputField.value);
+        }
+    });
+
+    // Handle generalize checkbox
+    generalizeCheckbox.addEventListener('change', (event) => {
+        if (event.target.checked) {
+            if (itemInput.value) {
+                // Store the current value as the specific path if it's not already generalized
+                if (itemInput.value.match(/\[\d+\]$/)) {
+                    specificItemXpath = itemInput.value;
+                }
+                // Generalize the path by removing the last positional predicate
+                itemInput.value = itemInput.value.replace(/\[\d+\]$/, '');
+            }
+        } else {
+            // Revert to the specific path if it exists
+            if (specificItemXpath) {
+                itemInput.value = specificItemXpath;
             }
         }
     });
+
+    function previewXPath(xpath) {
+        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+        // Clear previous highlights
+        const previouslyHighlighted = iframeDocument.querySelectorAll('.rss-bridge-highlight');
+        previouslyHighlighted.forEach(el => el.classList.remove('rss-bridge-highlight'));
+
+        if (!xpath) {
+            return; // Nothing to preview
+        }
+
+        try {
+            const result = iframeDocument.evaluate(xpath, iframeDocument, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            for (let i = 0; i < result.snapshotLength; i++) {
+                const node = result.snapshotItem(i);
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    node.classList.add('rss-bridge-highlight');
+                }
+            }
+            if (result.snapshotLength === 0) {
+                alert('No elements found for this XPath.');
+            }
+        } catch (e) {
+            alert('Invalid XPath expression: ' .concat(e.message));
+        }
+    }
 
     // Handle "Save and Close" button
     const saveButton = document.getElementById('save-selectors');
@@ -94,6 +153,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 ix++;
             }
         }
-        return null; // Should not happen
+        return null;
     }
 });
