@@ -34,11 +34,11 @@ class ProxyAction implements ActionInterface
                 return new Response($response->getBody(), 200, ['Content-Type' => $contentType]);
             }
 
-            $html = $response->getBody();
-            $dom = str_get_html($html, true, true, DEFAULT_TARGET_CHARSET, true, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT);
+            $html = mb_convert_encoding($response->getBody(), 'HTML-ENTITIES', 'UTF-8');
+            $dom = str_get_html($html, true, true, 'UTF-8', true, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT);
 
             if (!$dom) {
-                return new Response($html, 200, ['Content-Type' => $contentType]);
+                return new Response($html, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
             }
 
             $base_url = $url;
@@ -54,7 +54,7 @@ class ProxyAction implements ActionInterface
                 }
             }
 
-            return new Response($dom->save(), 200, ['Content-Type' => $contentType]);
+            return new Response($dom->save(), 200, ['Content-Type' => 'text/html; charset=UTF-8']);
 
         } catch (\Exception $e) {
             return new Response(render(__DIR__ . '/../templates/error.html.php', ['message' => 'Failed to proxy the request: ' . $e->getMessage()]), 500);

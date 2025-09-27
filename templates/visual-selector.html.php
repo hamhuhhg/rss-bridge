@@ -40,12 +40,33 @@
         .clear-button {
             margin-left: 5px;
         }
+        .instructions {
+            border: 1px solid #f0ad4e;
+            background-color: #fcf8e3;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .instructions p {
+            margin: 0 0 5px 0;
+        }
+        .instructions code {
+            background-color: #eee;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
     </style>
     <script src="static/visual-selector.js"></script>
 </head>
 <body>
     <div id="control-panel">
         <h2>Visual Selector</h2>
+        <div class="instructions">
+            <p><strong>ملاحظة هامة:</strong></p>
+            <p>لتحديد <strong>قائمة</strong> من العناصر (مثل قائمة أخبار)، انقر على العنصر <strong>الأول</strong> في القائمة. بعد ذلك، قم بتعيين مسار XPath إلى حقل "محدد العنصر".</p>
+            <p>أخيراً، <strong>احذف يدوياً</strong> رقم الفهرس من نهاية المسار (مثال: احذف <code>[1]</code>) لتحديد جميع العناصر في القائمة.</p>
+        </div>
         <div id="selection-display">
             <p><strong>Selected XPath:</strong></p>
             <code id="selected-xpath"></code>
