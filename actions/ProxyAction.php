@@ -19,7 +19,15 @@ class ProxyAction implements ActionInterface
 
         try {
             $response = $this->httpClient->request($url);
-            $contentType = $response->getHeaderLine('Content-Type');
+
+            $headers = $response->getHeaders();
+            $contentType = '';
+            foreach ($headers as $name => $value) {
+                if (strtolower($name) === 'content-type') {
+                    $contentType = is_array($value) ? $value[0] : $value;
+                    break;
+                }
+            }
 
             // Only process HTML content
             if (strpos($contentType, 'text/html') === false) {
