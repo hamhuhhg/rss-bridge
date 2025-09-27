@@ -35,7 +35,7 @@ class ProxyAction implements ActionInterface
             }
 
             $html = $response->getBody();
-            $dom = getSimpleHTMLDOM($html, true, true, DEFAULT_TARGET_CHARSET, true, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT);
+            $dom = str_get_html($html, true, true, DEFAULT_TARGET_CHARSET, true, DEFAULT_BR_TEXT, DEFAULT_SPAN_TEXT);
 
             if (!$dom) {
                 return new Response($html, 200, ['Content-Type' => $contentType]);
