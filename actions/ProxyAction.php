@@ -49,7 +49,7 @@ class ProxyAction implements ActionInterface
                 $original_url = $element->$attr;
 
                 if ($original_url && !preg_match('/^(data|http|https):/i', $original_url)) {
-                    $new_url = url_join($base_url, $original_url);
+                    $new_url = Url::makeAbsolute($base_url, $original_url);
                     $element->$attr = '?action=proxy&url=' . urlencode($new_url);
                 }
             }
